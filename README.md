@@ -7,20 +7,20 @@ Requires jQuery 1.3 or greater
 ## Features
 
 * A DSL for grouping and defining tracking events 
+* DevMode for ensuring the correct data is being sent to GA *before* you roll to production
+* Uses of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
+* Bind events to DOM elements that get loaded via AJAX
 * Allows you to keep tracking functionality seperate from other page logic
-* A DevMode for ensuring the correct data is being sent to GA *before* you roll to production
-* Uses jQuery's [on()][onfuction] function for event binding, so you can handle js events of all types (defaults is click)
-* Can bind events to DOM elements that get loaded via AJAX
 
 ## Basic Usage
 
 ### Install and Setup
 
-You first need to add the track_that.js code to your project and ensure it gets loaded by your pages.
+Add track_that.js to your project and ensure it gets loaded by your pages.
 
 Now you can start defining event definitions.  These will need to be run after the page is ready.  
 
-It is also  a good idea to wrap this section in ``` if( TrackThat.enabled() ) ```.  This is not required, but will speed things up if Google Analytics is not included on the page. 
+It is also  a good idea to wrap this section in a call to ```TrackThat.enabled()```.  This is not required, but will speed things up if Google Analytics is not included on the page. 
 
 ``` javascript
 $(document).ready( function(){
@@ -36,18 +36,18 @@ Now that you know where to put your calls to TrackThat, lets look at some basic 
 
 category() is used to define a group of events that all share the same [Category][gacategories].
 
-The two params are a string and an array of event definitions (which are also arrays).
+The two params are a string and an array of event definitions (also arrays).
 
 ``` javascript
 TrackThat.category('Home Page', [
-    ['Sidebar', 'Callout Click', $('#sidebar_callout')],
-    ['Sidebar', 'Ad Click', $('.sidebar_ad')]
+    ['Sidebar', 'Callout Click', $('#sidebar_callout')], // event definition 1
+    ['Sidebar', 'Ad Click', $('.sidebar_ad')]  // event definition 2
   ]
 );
 ```
 
-The first string in the event definition array is the [Action][gaaction] and the second is the [Label][galabel].
-The third element in the array is a jQuery result of the elements you wish to bind the event to, by default the click event will be used.
+The first param in the event definition ('Sidebar') is the [Action][gaaction] and the second ('Callout Click') is the [Label][galabel].
+The third is a jQuery result of the element(s) you wish to bind the event to.
 
 When a user clicks the matching element, the specified strings will be sent to Google Analytics.  For example, any ```.sidebar_ad``` click will trigger a
 ``` javascript
@@ -76,21 +76,21 @@ TrackThat.category('Navigation', [
 ]);
 ```
 
-When a link is clicked, the value for the Label will be obtained by calling [text()][jquerytext] on the anchor tag.  If the help link was clicked, it will send the events as 'Navigation', 'Top Nav Click', 'Help'
+When a link is clicked, the value for the Label will be obtained by calling [text()][jquerytext] on the anchor tag.  For example if the help link was clicked, it would send 'Navigation', 'Top Nav Click' and 'Help'.
 
-Other options are:
+Other dynamic options are:
 
 * 'text()' - calls [text()][jquerytext]
 * 'val()' - calls [val()][jqueryval]
-* 'attr:xxx' - will call [attr()][jqueryattr] with the parameter you specify (instead of xxx)
+* 'attr:xxx' - will call [attr()][jqueryattr] with the parameter you specify in place of xxx
 
-[Action][gaaction] and [Label][galabel] values can both be obtained dynamically.  [Category][gacategories] must always be hardcoded.
+[Action][gaaction] and [Label][galabel] values can both be obtained dynamically but [Category][gacategories] must be a hardcoded string.
 
 ## Advance Usage
 
-### Tracking Elements Loaded Via AJAX 
+### AJAX Loaded Elements  
 
-The optional 4th element in an event definition is a jQuery selector string to be passed to [on()][onfuction].  For example let's say you have a recommendation widget that ajax loads some links:
+The optional 4th param in an event definition is a jQuery selector to be passed to [on()][onfuction].  For example let's say you have a recommendation widget that loads some links in after the fact:
 
 ``` html
 <div id='recommendations'>
@@ -102,7 +102,7 @@ You could track clicks to anchor tags indside #recommendations like this:
 
 ``` javascript
 TrackThat.category('Sidebar', [
-  ['Recommendation Click', 'attr:href', $('#recommendations'), 'a.rec_link']
+  ['Recommendation Click', 'attr:href', $('#recommendations'), 'a']
 ]);
 ```
 
@@ -117,23 +117,27 @@ TrackThat.category('Filter Controls', [
 );
 ```
 
-You can pass any event that [on()][onfuction] allows.
+You can pass any event name that [on()][onfuction] understands.
 
 ## Dev Mode
 
-When writing a new event definition, it is helpful to test it out.  If you add the following before your event definitions:
+If you set the following before your calls to ```category()``` ( and to TrackThat.enabled() )
 
 ``` javascript
 TrackThat.devmode = true;
 ```
 
-This will bypass checks that Google Analytics is actually on the page and will trigger a javascript alert containing the [Category][gacategories], [Action][gaaction] and [Label][galabel] values that would be sent seperated by the pipe character:
+a javascript alert will trigger containing the [Category][gacategories], [Action][gaaction] and [Label][galabel] values that would be sent seperated by the pipe character.  It looks like:
 
 ```
 Sidebar | Recommendation Click | /help_page
 ```
 
 Don't forget to remove the devmode line when you are done or it will behave the same way in production!
+
+## Thanks
+
+To my co-workers at [Moxie Software][moxiesoft] for their feedback and input on this
 
 
 [eventtracking]: https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide
@@ -144,3 +148,4 @@ Don't forget to remove the devmode line when you are done or it will behave the 
 [jqueryval]: http://api.jquery.com/val/
 [jqueryattr]: http://api.jquery.com/attr/
 [onfuction]: http://api.jquery.com/on/
+[moxiesoft]: http://www.moxiesoft.com/

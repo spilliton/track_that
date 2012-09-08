@@ -1,9 +1,8 @@
 # Track That
 
-Track That is a small javascript library that makes implementing [Google Analytics Event Tracking][eventtracking] super easy.  
-For many use cases you won't even need to modify your existing HTML structure or clutter your HTML tags with excess tracking attributes.
+A small javascript library that makes implementing [Google Analytics Event Tracking][eventtracking] super easy
 
-It requires jQuery 1.3 or greater to use.
+Requires jQuery 1.3 or greater
 
 ## Features
 
@@ -20,8 +19,8 @@ It requires jQuery 1.3 or greater to use.
 You first need to add the track_that.js code to your project and ensure it gets loaded by your pages.
 
 Now you can start defining event definitions.  These will need to be run after the page is ready.  
-It is also  a good idea to wrap this section in ``` if( TrackThat.enabled() ) ```.  
-This is not required, but will speed things up if Google Analytics is not included on the page. 
+
+It is also  a good idea to wrap this section in ``` if( TrackThat.enabled() ) ```.  This is not required, but will speed things up if Google Analytics is not included on the page. 
 
 ``` javascript
 $(document).ready( function(){
@@ -33,11 +32,11 @@ $(document).ready( function(){
 
 Now that you know where to put your calls to TrackThat, lets look at some basic use cases.
 
-### Tracking Clicks
+### Click Tracking
 
-The TrackThat.category() function is used to define a group of events that all share the same [GA Category][gacategories].
+category() is used to define a group of events that all share the same [Category][gacategories].
 
-It's params are string specifying the category and an array of event definitions (which are also arrays).
+The two params are a string and an array of event definitions (which are also arrays).
 
 ``` javascript
 TrackThat.category('Home Page', [
@@ -47,19 +46,19 @@ TrackThat.category('Home Page', [
 );
 ```
 
-The first string in an event definition array is the [GA Action][gaaction] and the second is the [GA Label][galabel].
+The first string in the event definition array is the [Action][gaaction] and the second is the [Label][galabel].
 The third element in the array is a jQuery result of the elements you wish to bind the event to, by default the click event will be used.
 
-When a user clicks the matching element, the specified strings will be sent to Google Analytics.  For example, any ```.sidebar_ad``` click will trigger the call
+When a user clicks the matching element, the specified strings will be sent to Google Analytics.  For example, any ```.sidebar_ad``` click will trigger a
 ``` javascript
 _gaq.push(['_trackEvent', 'Home Page', 'Sidebar', 'Ad Click']);
 ```
 
-### Dynamic Values for Action and Label
+Google Analytics only requires a [Category][gacategories] and [Action][gaaction].  If you wish to omit [Label][galabel], you can pass ```''``` or ```null``` for the label param. 
 
-The previous definitions are great if you want to send the same 3 strings to google for all similar events but we often need to track things more dynamically.
+### Dynamic Values
 
-For example lets say you want to track usage of a navbar on your site:
+The previous definitions are great if you want to send the same 3 strings to google for similar events but we often need to track things more dynamically.  For example lets say you want to track usage of a navbar:
 
 ``` html
 <ul id='top_nav'>
@@ -69,7 +68,7 @@ For example lets say you want to track usage of a navbar on your site:
 </ul>
 ```
 
-You can track all three of these with one event definition
+You can track all three with one event definition
 
 ``` javascript
 TrackThat.category('Navigation', [
@@ -77,16 +76,64 @@ TrackThat.category('Navigation', [
 ]);
 ```
 
-When a link is clicked, the value for the Label will be obtained by calling [text()][jquerytext] on the clicked anchor tag.
-So if the help link was clicked, it will send the event as 'Navigation', 'Top Nav Click', 'Help'
+When a link is clicked, the value for the Label will be obtained by calling [text()][jquerytext] on the anchor tag.  If the help link was clicked, it will send the events as 'Navigation', 'Top Nav Click', 'Help'
 
-The following are all the available options:
+Other options are:
 
-* 'text()': calls [text()][jquerytext]
-* 'val()': calls [val()][jqueryval]
-* 'attr:xxx': will call [attr()][jqueryattr] with the parameter you specify (instead of xxx)
+* 'text()' - calls [text()][jquerytext]
+* 'val()' - calls [val()][jqueryval]
+* 'attr:xxx' - will call [attr()][jqueryattr] with the parameter you specify (instead of xxx)
 
-Action and Label values can both be obtained dynamically.  Category must always be a hardcoded string.
+[Action][gaaction] and [Label][galabel] values can both be obtained dynamically.  [Category][gacategories] must always be hardcoded.
+
+## Advance Usage
+
+### Tracking Elements Loaded Via AJAX 
+
+The optional 4th element in an event definition is a jQuery selector string to be passed to [on()][onfuction].  For example let's say you have a recommendation widget that ajax loads some links:
+
+``` html
+<div id='recommendations'>
+  <!-- contents loaded via AJAX -->
+</div>
+``` 
+
+You could track clicks to anchor tags indside #recommendations like this:
+
+``` javascript
+TrackThat.category('Sidebar', [
+  ['Recommendation Click', 'attr:href', $('#recommendations'), 'a.rec_link']
+]);
+```
+
+### Non-Click Event Types
+
+The final param to the event definition array is an event type.  By default this is 'click', but let's say you have a select tag and you would like to track when a user changes it's value.  You could do the following:
+
+``` javascript
+TrackThat.category('Filter Controls', [
+  ['Dropdown Change', 'val()', $('#filter_controls'), 'select.sorter', 'change']
+ ]
+);
+```
+
+You can pass any event that [on()][onfuction] allows.
+
+## Dev Mode
+
+When writing a new event definition, it is helpful to test it out.  If you add the following before your event definitions:
+
+``` javascript
+TrackThat.devmode = true;
+```
+
+This will bypass checks that Google Analytics is actually on the page and will trigger a javascript alert containing the [Category][gacategories], [Action][gaaction] and [Label][galabel] values that would be sent seperated by the pipe character:
+
+```
+Sidebar | Recommendation Click | /help_page
+```
+
+Don't forget to remove the devmode line when you are done or it will behave the same way in production!
 
 
 [eventtracking]: https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide

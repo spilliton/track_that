@@ -10,7 +10,7 @@ Requires jQuery 1.3 or greater
 * [DevMode](\#dev-mode) for ensuring the correct data is being sent to GA *before* you roll to production
 * Use of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
 * Allows for binding events to DOM elements that get loaded via AJAX
-* Encourages seperation of tracking functionality from other page logic
+* Encourages separation of tracking functionality from other page logic
 * DSL minifies nicely due to array style paramater passing
 
 ## Getting Started
@@ -38,7 +38,7 @@ $(document).ready( function(){
 });
 ```
 
-Now that you know where to put your calls to TrackThat, lets look at some basic use cases.
+Now that you know where to put your calls to TrackThat, let's look at some basic use cases.
 
 ### Click Tracking
 
@@ -66,7 +66,7 @@ Google Analytics only requires a [Category][gacategories] and [Action][gaaction]
 
 ### Dynamic Values
 
-The previous definitions are great if you want to send the same 3 strings to google for similar events but we often need to track things more dynamically.  For example lets say you want to track usage of a navbar:
+The previous definitions are great if you want to send the same 3 strings to google for similar events but we often need to track things more dynamically.  For example let's say you want to track usage of a navbar:
 
 ``` html
 <ul id='top_nav'>
@@ -84,7 +84,7 @@ TrackThat.category('Navigation', [
 ]);
 ```
 
-When a link is clicked, the value for the Label will be obtained by calling [text()][jquerytext] on the anchor tag.  For example if the help link was clicked, it would send 'Navigation', 'Top Nav Click' and 'Help'.
+When a link is clicked, the value for the Label will be obtained by calling [text()][jquerytext] on the anchor tag.  For example, if the help link was clicked, it would send 'Navigation', 'Top Nav Click' and 'Help'.
 
 Other dynamic options are:
 
@@ -98,7 +98,7 @@ Other dynamic options are:
 
 ### AJAX Loaded Elements  
 
-The optional 4th param in an event definition is a jQuery selector to be passed to [on()][onfuction].  For example let's say you have a recommendation widget that loads some links in after the fact:
+The optional 4th param in an event definition is a jQuery selector to be passed to [on()][onfuction].  For example, let's say you have a recommendation widget that loads some links in after the fact:
 
 ``` html
 <div id='recommendations'>
@@ -145,7 +145,7 @@ If you set the following before your calls to ```category()``` ( and to TrackTha
 TrackThat.devmode = true;
 ```
 
-a javascript alert will trigger containing the [Category][gacategories], [Action][gaaction] and [Label][galabel] values that would be sent seperated by the pipe character.  It looks like:
+a javascript alert will trigger containing the [Category][gacategories], [Action][gaaction] and [Label][galabel] values that would be sent separated by the pipe character.  It looks like:
 
 ```
 Sidebar | Recommendation Click | /help_page
@@ -172,7 +172,7 @@ Each event definition requires the use of jQuery selectors.  If you have 50+ eve
 
 ### Use Variables
 
-If you repeat a string or a selector multiple times, you can achieve greater levels of javascript minification and faster run times by storing the values in variables and re-using them in each definition.  For example lets say you are tracking a bunch of events on the same section of your site:
+If you repeat a string or a selector multiple times, you can achieve greater levels of javascript minification and faster run times by storing the values in variables and re-using them in each definition.  For example, let's say you are tracking a bunch of events on the same section of your site:
 
 ``` javascript
 TrackThat.category('Newsfeed', [

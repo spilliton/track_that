@@ -7,11 +7,18 @@ Requires jQuery 1.3 or greater
 ## Features
 
 * A DSL for grouping and defining tracking events 
-* DevMode for ensuring the correct data is being sent to GA *before* you roll to production
+* [DevMode][#dev-mode] for ensuring the correct data is being sent to GA *before* you roll to production
 * Uses of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
 * Bind events to DOM elements that get loaded via AJAX
 * Allows you to keep tracking functionality seperate from other page logic
 * DSL minifies nicely due to array style paramater passing
+
+## Getting Started
+
+* [Basic Usage][#basic-usage]
+* [Advance Usage][#advance-usage]
+* [Dev Mode][#dev-mode]
+* [Best Practices][#best-practices]
 
 ## Basic Usage
 
@@ -42,7 +49,7 @@ The two params are a string and an array of event definitions (also arrays).
 ``` javascript
 TrackThat.category('Home Page', [
     ['Sidebar', 'Callout Click', $('#sidebar_callout')], // event definition 1
-    ['Sidebar', 'Ad Click', $('.sidebar_ad')]  // event definition 2
+    ['Sidebar', 'Ad Click', $('div.sidebar_ad')]  // event definition 2
   ]
 );
 ```
@@ -145,6 +152,64 @@ Sidebar | Recommendation Click | /help_page
 ```
 
 Don't forget to remove the devmode line when you are done or it will behave the same way in production!
+
+## Best Practices
+
+The more event tracking you have on your site, the more insight you will have into how users interact with your website, however, you don't want the time it takes to add the extra tracking to have a large impact on javscript load times or to bloat the javascript files sent to the user's browser.  With that in mind, here are some things you can do to minimize the impact that event tracking has on your site's browser footprint:
+
+### Use Fast Selectors
+
+Each event definition requires the use of jQuery selectors.  If you have 50+ events defined, your code will now be spending much more time searching for DOM elements so you had best make these as efficient as possible.  [This article][http://www.sitepoint.com/efficient-jquery-selectors/] provides a good overview of selector optimization.  Use ID selectors when possible, avoid nesting selectors, and keep in mind that Track That is using [on()][onfuction] for event binding.
+
+``` javascript
+// Bad
+['Sidebar', 'Ad Click', $('.sidebar .banner_ad a')]
+// Better
+['Sidebar', 'Ad Click', $('#sidebar'), '.banner_ad a']
+// Best
+['Sidebar', 'Ad Click', $('#sidebar'), 'a.ad_link']
+```
+
+### Use Variables
+
+If you repeat a string or a selector multiple times, you can achieve greater levels of javascript minification and faster run times by storing the values in variables and re-using them in each definition.  For example lets say you are tracking a bunch of events on the same portion of your site:
+
+``` javascript
+TrackThat.category('Newsfeed', [
+  ['Top Controls', 'Filter Click', $('#newsfeed'), 'a.filter'],
+  ['Top Controls', 'Sort Click', $('#newsfeed'), 'a.sorter'],
+  ['Top Controls', 'Reload Click', $('#newsfeed'), 'a.reloader']
+]);
+```
+
+There is a lot of redundancy here, none of which can be minified.  Plus the #newsfeed selection happens 3 different times.  Let's optimize with some variables.
+
+``` javascript
+var top_controls = 'Top Controls';
+var newsfeed = $('#newsfeed');
+
+TrackThat.category('Newsfeed', [
+  [top_controls, 'Filter Click', newsfeed, 'a.filter'],
+  [top_controls, 'Sort Click', newsfeed, 'a.sorter'],
+  [top_controls, 'Reload Click', newsfeed, 'a.reloader']
+]);
+```
+
+Just as readable to the developer, but can get minified down to:
+
+``` javascript
+var b="Top Controls";var d=c("#newsfeed");TrackThat.category("Newsfeed",[[b,"Filter Click",d,"a.filter"],[b,"Sort Click",d,"a.sorter"],[b,"Reload Click",d,"a.reloader"]]);
+```
+
+### Use A Closure
+
+Javascript compression can be greatest when the minifier is certain that variable names won't conflict with others, you can help them out by scoping all your tracking code inside a closure.  I tend to do mine like this:
+
+``` javascript
+(function($, document) {
+  // all your shtuff here
+})(jQuery, document);
+```
 
 ## Thanks
 

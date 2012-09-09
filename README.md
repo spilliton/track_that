@@ -8,9 +8,9 @@ Requires jQuery 1.3 or greater
 
 * A DSL for grouping and defining tracking events 
 * [DevMode](\#dev-mode) for ensuring the correct data is being sent to GA *before* you roll to production
-* Uses of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
-* Bind events to DOM elements that get loaded via AJAX
-* Allows you to keep tracking functionality seperate from other page logic
+* Use of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
+* Allows for binding events to DOM elements that get loaded via AJAX
+* Encourages seperation of tracking functionality from other page logic
 * DSL minifies nicely due to array style paramater passing
 
 ## Getting Started

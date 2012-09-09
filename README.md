@@ -11,6 +11,7 @@ Requires jQuery 1.3 or greater
 * Uses of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
 * Bind events to DOM elements that get loaded via AJAX
 * Allows you to keep tracking functionality seperate from other page logic
+* DSL minifies nicely due to array style paramater passing
 
 ## Basic Usage
 
@@ -119,6 +120,16 @@ TrackThat.category('Filter Controls', [
 
 You can pass any event name that [on()][onfuction] understands.
 
+### Manually Pushing An Event
+
+As a last resort if you cannot get an event triggering properly (often due to a plugin/event calling .preventDefault ), you can manually send the data you want to GA using pushEvent():
+
+``` javascript
+TrackThat.pushEvent($(this), {category: 'Homepage', action: 'Sidebar', label: 'text()'} );
+```
+
+The action and label params support the same variable attribute values as TrackThat.category(): 'text()', 'val()', and 'attr:xxx'
+
 ## Dev Mode
 
 If you set the following before your calls to ```category()``` ( and to TrackThat.enabled() )
@@ -137,7 +148,7 @@ Don't forget to remove the devmode line when you are done or it will behave the 
 
 ## Thanks
 
-To my co-workers at [Moxie Software][moxiesoft] for their feedback and input on this
+To my co-workers at [Moxie Software][moxiesoft] for their feedback and input
 
 
 [eventtracking]: https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide

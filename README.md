@@ -155,24 +155,24 @@ Don't forget to remove the devmode line when you are done or it will behave the 
 
 ## Best Practices
 
-The more event tracking you have on your site, the more insight you will have into how users interact with your website, however, you don't want the time it takes to add the extra tracking to have a large impact on javscript load times or to bloat the javascript files sent to the user's browser.  With that in mind, here are some things you can do to minimize the impact that event tracking has on your site's browser footprint:
+The more event tracking you have, the more insight you will have into how users interact with your website.  However, you don't want this to have a large impact on javscript load times or to bloat the files sent to the user's browser.  With that in mind, here are some things you can do to minimize the impact that event tracking has on your site's browser footprint:
 
 ### Use Fast Selectors
 
-Each event definition requires the use of jQuery selectors.  If you have 50+ events defined, your code will now be spending much more time searching for DOM elements so you had best make these as efficient as possible.  [This article][http://www.sitepoint.com/efficient-jquery-selectors/] provides a good overview of selector optimization.  Use ID selectors when possible, avoid nesting selectors, and keep in mind that Track That is using [on()][onfuction] for event binding.
+Each event definition requires the use of jQuery selectors.  If you have 50+ events defined, your code will now be spending much more time searching for DOM elements so you had best make these as efficient as possible.  [This article](http://www.sitepoint.com/efficient-jquery-selectors/) provides a good overview of selector optimization, but in short: use ID selectors when possible, avoid nesting selectors, and keep in mind that Track That is using [on()][onfuction] for event binding.
 
 ``` javascript
 // Bad
-['Sidebar', 'Ad Click', $('.sidebar .banner_ad a')]
+['Sidebar', 'Ad Click', $('.sidebar .banner_ad a')] // calls $('.sidebar .banner_ad a').on('click', function()...
 // Better
-['Sidebar', 'Ad Click', $('#sidebar'), '.banner_ad a']
+['Sidebar', 'Ad Click', $('#sidebar'), '.banner_ad a'] // calls $('$sidebar').on('click', '.banner_ad a', function()...
 // Best
-['Sidebar', 'Ad Click', $('#sidebar'), 'a.ad_link']
+['Sidebar', 'Ad Click', $('#sidebar'), 'a.ad_link'] // calls $('$sidebar').on('click', 'a.ad_link', function()...
 ```
 
 ### Use Variables
 
-If you repeat a string or a selector multiple times, you can achieve greater levels of javascript minification and faster run times by storing the values in variables and re-using them in each definition.  For example lets say you are tracking a bunch of events on the same portion of your site:
+If you repeat a string or a selector multiple times, you can achieve greater levels of javascript minification and faster run times by storing the values in variables and re-using them in each definition.  For example lets say you are tracking a bunch of events on the same section of your site:
 
 ``` javascript
 TrackThat.category('Newsfeed', [
@@ -182,7 +182,7 @@ TrackThat.category('Newsfeed', [
 ]);
 ```
 
-There is a lot of redundancy here, none of which can be minified.  Plus the #newsfeed selection happens 3 different times.  Let's optimize with some variables.
+There is a lot of redundancy here, none of which can be minified and the #newsfeed selection happens 3 different times.  Let's optimize with some variables.
 
 ``` javascript
 var top_controls = 'Top Controls';
@@ -198,12 +198,12 @@ TrackThat.category('Newsfeed', [
 Just as readable to the developer, but can get minified down to:
 
 ``` javascript
-var b="Top Controls";var d=c("#newsfeed");TrackThat.category("Newsfeed",[[b,"Filter Click",d,"a.filter"],[b,"Sort Click",d,"a.sorter"],[b,"Reload Click",d,"a.reloader"]]);
+var b="Top Controls";var d=$("#newsfeed");TrackThat.category("Newsfeed",[[b,"Filter Click",d,"a.filter"],[b,"Sort Click",d,"a.sorter"],[b,"Reload Click",d,"a.reloader"]]);
 ```
 
 ### Use A Closure
 
-Javascript compression can be greatest when the minifier is certain that variable names won't conflict with others, you can help them out by scoping all your tracking code inside a closure.  I tend to do mine like this:
+Javascript compression can be greatest when the minifier is certain that variable names won't conflict.  You can help them out by scoping all your tracking code inside a closure.  I tend to do mine like this:
 
 ``` javascript
 (function($, document) {
@@ -213,7 +213,7 @@ Javascript compression can be greatest when the minifier is certain that variabl
 
 ## Thanks
 
-To my co-workers at [Moxie Software][moxiesoft] for their feedback and input
+To my co-workers at [Moxie Software][moxiesoft] for their feedback and input on this project.
 
 
 [eventtracking]: https://developers.google.com/analytics/devguides/collection/gajs/eventTrackerGuide

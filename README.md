@@ -91,6 +91,7 @@ Other dynamic options are:
 * 'text()' - calls [text()][jquerytext]
 * 'val()' - calls [val()][jqueryval]
 * 'attr:xxx' - will call [attr()][jqueryattr] with the parameter you specify in place of xxx
+* 'prop:xxx' - will call [prop()][jqueryprop] with the parameter you specify in place of xxx
 
 [Action][gaaction] and [Label][galabel] values can both be obtained dynamically but [Category][gacategories] must be a hardcoded string.
 
@@ -223,5 +224,6 @@ To my co-workers at [Moxie Software][moxiesoft] for their feedback and input on 
 [jquerytext]: http://api.jquery.com/text/
 [jqueryval]: http://api.jquery.com/val/
 [jqueryattr]: http://api.jquery.com/attr/
+[jqueryprop]: http://api.jquery.com/prop/
 [onfuction]: http://api.jquery.com/on/
 [moxiesoft]: http://www.moxiesoft.com/

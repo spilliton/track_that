@@ -177,6 +177,10 @@ var TrackThat = {
         attr_name = option.split(':')[1];
         return elem.attr(attr_name);
       }
+      if(option.indexOf('prop:') == 0 ) {
+        attr_name = option.split(':')[1];
+        return elem.prop(attr_name);
+      }
       return option;
   }
 };

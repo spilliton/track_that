@@ -6,7 +6,7 @@ Requires jQuery 1.3 or greater
 
 ## Features
 
-* A DSL for grouping and defining tracking events 
+* A DSL for grouping and defining tracking events
 * [DevMode](\#dev-mode) for ensuring the correct data is being sent to GA *before* you roll to production
 * Use of jQuery's [on()][onfuction] function means you can handle js events of all types (default is click)
 * Allows for binding events to DOM elements that get loaded via AJAX
@@ -26,9 +26,9 @@ Requires jQuery 1.3 or greater
 
 Add track_that.js to your project and ensure it gets loaded by your pages.
 
-Now you can start defining event definitions.  These will need to be run after the page is ready.  
+Now you can start defining event definitions.  These will need to be run after the page is ready.
 
-It is also  a good idea to wrap this section in a call to ```TrackThat.enabled()```.  This is not required, but will speed things up if Google Analytics is not included on the page. 
+It is also  a good idea to wrap this section in a call to ```TrackThat.enabled()```.  This is not required, but will speed things up if Google Analytics is not included on the page.
 
 ``` javascript
 $(document).ready( function(){
@@ -62,7 +62,7 @@ When a user clicks the matching element, the specified strings will be sent to G
 _gaq.push(['_trackEvent', 'Home Page', 'Sidebar', 'Ad Click']);
 ```
 
-Google Analytics only requires a [Category][gacategories] and [Action][gaaction].  If you wish to omit [Label][galabel], you can pass ```''``` or ```null``` for the label param. 
+Google Analytics only requires a [Category][gacategories] and [Action][gaaction].  If you wish to omit [Label][galabel], you can pass ```''``` or ```null``` for the label param.
 
 ### Dynamic Values
 
@@ -97,7 +97,7 @@ Other dynamic options are:
 
 ## Advance Usage
 
-### AJAX Loaded Elements  
+### AJAX Loaded Elements
 
 The optional 4th param in an event definition is a jQuery selector to be passed to [on()][onfuction].  For example, let's say you have a recommendation widget that loads some links in after the fact:
 
@@ -105,7 +105,7 @@ The optional 4th param in an event definition is a jQuery selector to be passed 
 <div id='recommendations'>
   <!-- contents loaded via AJAX -->
 </div>
-``` 
+```
 
 You could track clicks to anchor tags indside #recommendations like this:
 
@@ -137,6 +137,15 @@ TrackThat.pushEvent($(this), {category: 'Homepage', action: 'Sidebar', label: 't
 ```
 
 The action and label params support the same variable attribute values as TrackThat.category(): 'text()', 'val()', and 'attr:xxx'
+
+You can also pass a function to pushEvent as long as you return category/action/label in a hash:
+
+``` javascript
+TrackThat.pushEvent($(this), function(elem){
+  var act = elem.parent.data('action') + ':' + elem.data('detail');
+  return {category: 'Product Overlay Trigger', action: act, label: ''};
+});
+```
 
 ## Dev Mode
 

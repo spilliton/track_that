@@ -1,5 +1,7 @@
 # Track That
 
+[![Code Climate](https://codeclimate.com/github/spilliton/track_that.png)](https://codeclimate.com/github/spilliton/track_that)
+
 A small javascript library that makes implementing [Google Analytics Event Tracking][eventtracking] super easy
 
 Requires jQuery 1.3 or greater

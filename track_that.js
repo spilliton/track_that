@@ -27,6 +27,11 @@ var TrackThat = {
   */
   devmode: false,
 
+ /** 
+    Set this to false if you only want events to be logged to console in devmode
+  */
+  devmodeAlert: true,
+
   /**
   *  The category function is the bread and butter of TrackThat.
   *  You specify a string that is the category to be sent to GA and
@@ -154,7 +159,12 @@ var TrackThat = {
       if( $.isBlank(act) ){ console.log('TrackThat.pushEvent requires a non-blank action!'); return; }
 
       // Alert if devmode, else push to google
-      if( TrackThat.devmode ){ alert(cat+' | '+act+' | '+lbl); }
+      if( TrackThat.devmode ){ 
+        var msg = cat+' | '+act+' | '+lbl;
+        if( TrackThat.devmodeAlert ){ alert(msg);  }
+        console.log(msg);
+      }
+
       else{ _gaq.push(['_trackEvent', cat, act, lbl]);  }
     }
   },

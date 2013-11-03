@@ -131,10 +131,13 @@ var TrackThat = {
     if(TrackThat.enabled()){
       if( !(elem instanceof jQuery) ){ console.log('TrackThat.pushEvent requires a jQuery element as first param!'); return; }
 
-      var cat = act = lbl = '';
+      var cat, act, lbl;
+      cat = '';
+      act = '';
+      lbl = '';
 
       // If they provide custom function to obtain the tracking data
-      if(typeof(opts_or_function) == "function"){
+      if(typeof(opts_or_function) === "function"){
         opts = opts_or_function(elem);
         act = opts.action;
         lbl = opts.label;
@@ -167,7 +170,7 @@ var TrackThat = {
   *
   */
   enabled: function(){
-    if( typeof _gaq != 'undefined' || TrackThat.devmode )
+    if( typeof _gaq !== 'undefined' || TrackThat.devmode )
       return true;
     else
       return false;
@@ -178,7 +181,7 @@ var TrackThat = {
   *  Calls the jQuery on() function with the appropriate params
   */
   attachEvent: function (opts){
-    if( opts.element != null && opts.element.length > 0 ){
+    if( opts.element !== null && opts.element.length > 0 ){
       var event_type = "click";
       if(!$.isBlank(opts.event_type)){
         event_type = opts.event_type;
@@ -194,17 +197,17 @@ var TrackThat = {
   */
   valueFromOption: function (elem, option){
       if($.isBlank(option)){ return ''; }
-      if(option == 'val()') { return elem.val();  }
-      if(option == 'text()'){ return elem.text(); }
-      if(option.indexOf('attr:') == 0 ) {
+      if(option === 'val()') { return elem.val();  }
+      if(option === 'text()'){ return elem.text(); }
+      if(option.indexOf('attr:') === 0 ) {
         attr_name = option.split(':')[1];
         return elem.attr(attr_name);
       }
-      if(option.indexOf('prop:') == 0 ) {
+      if(option.indexOf('prop:') === 0 ) {
         attr_name = option.split(':')[1];
         return elem.prop(attr_name);
       }
-      if(option.indexOf('data:') == 0 ) {
+      if(option.indexOf('data:') === 0 ) {
         attr_name = option.split(':')[1];
         return elem.data(attr_name);
       }
